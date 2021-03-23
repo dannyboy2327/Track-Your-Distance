@@ -2,7 +2,9 @@ package com.anomalydev.trackyourdistance.util
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import androidx.fragment.app.Fragment
+import com.anomalydev.trackyourdistance.util.Constants.PERMISSION_BACKGROUND_LOCATION_REQUEST_CODE
 import com.anomalydev.trackyourdistance.util.Constants.PERMISSION_LOCATION_REQUEST_CODE
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -23,4 +25,27 @@ object Permissions {
                 Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
+
+    fun hasBackgroundPermissionLocation(context: Context) : Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return EasyPermissions.hasPermissions(
+                    context,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+        }
+        return true
+    }
+
+    fun requestBackgroundPermissionLocation(fragment: Fragment) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            EasyPermissions.requestPermissions(
+                    fragment,
+                    "Background location permission is essential to this application." +
+                            " Without it we will not be able to provide you with our service.",
+                    PERMISSION_BACKGROUND_LOCATION_REQUEST_CODE,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+        }
+    }
+
 }
