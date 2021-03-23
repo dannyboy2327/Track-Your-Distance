@@ -1,6 +1,7 @@
 package com.anomalydev.trackyourdistance
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -12,6 +13,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.anomalydev.trackyourdistance.databinding.FragmentMapsBinding
+import com.anomalydev.trackyourdistance.service.TrackerService
+import com.anomalydev.trackyourdistance.util.Constants
+import com.anomalydev.trackyourdistance.util.Constants.ACTION_SERVICE_START
 import com.anomalydev.trackyourdistance.util.ExtensionFunctions.disabled
 import com.anomalydev.trackyourdistance.util.ExtensionFunctions.enable
 import com.anomalydev.trackyourdistance.util.ExtensionFunctions.hide
@@ -106,10 +110,21 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
             }
 
             override fun onFinish() {
+                sendActionCommandToService(ACTION_SERVICE_START)
                 binding.timerTextView.hide()
             }
         }
         timer.start()
+    }
+
+    private fun sendActionCommandToService(action: String) {
+        Intent(
+            requireContext(),
+            TrackerService::class.java,
+        ).apply {
+            this.action = action
+            requireContext().startService(this)
+        }
     }
 
     override fun onMyLocationButtonClick(): Boolean {
