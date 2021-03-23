@@ -74,4 +74,6 @@ dependencies {
     //Easy permissions
     implementation 'pub.devrel:easypermissions:3.0.0'
 
+    //Helpers for implementing LifecycleOwner in a Service
+    implementation "androidx.lifecycle:lifecycle-service:2.3.0"
 }
