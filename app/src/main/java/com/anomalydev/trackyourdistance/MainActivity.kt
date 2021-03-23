@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import com.anomalydev.trackyourdistance.Permissions.hasLocationPermission
+import com.anomalydev.trackyourdistance.util.Permissions.hasLocationPermission
 
 class MainActivity : AppCompatActivity() {
 

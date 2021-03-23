@@ -1,9 +1,9 @@
-package com.anomalydev.trackyourdistance
+package com.anomalydev.trackyourdistance.util
 
 import android.Manifest
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.anomalydev.trackyourdistance.Constants.PERMISSION_LOCATION_REQUEST_CODE
+import com.anomalydev.trackyourdistance.util.Constants.PERMISSION_LOCATION_REQUEST_CODE
 import pub.devrel.easypermissions.EasyPermissions
 
 object Permissions {

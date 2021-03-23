@@ -1,4 +1,4 @@
-package com.anomalydev.trackyourdistance
+package com.anomalydev.trackyourdistance.util
 
 object Constants {
 
