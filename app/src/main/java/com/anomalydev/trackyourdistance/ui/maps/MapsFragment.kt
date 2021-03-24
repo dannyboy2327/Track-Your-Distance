@@ -1,4 +1,4 @@
-package com.anomalydev.trackyourdistance
+package com.anomalydev.trackyourdistance.ui.maps
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -6,37 +6,29 @@ import androidx.fragment.app.Fragment
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.anomalydev.trackyourdistance.R
 import com.anomalydev.trackyourdistance.databinding.FragmentMapsBinding
 import com.anomalydev.trackyourdistance.service.TrackerService
-import com.anomalydev.trackyourdistance.util.Constants
 import com.anomalydev.trackyourdistance.util.Constants.ACTION_SERVICE_START
 import com.anomalydev.trackyourdistance.util.ExtensionFunctions.disabled
-import com.anomalydev.trackyourdistance.util.ExtensionFunctions.enable
 import com.anomalydev.trackyourdistance.util.ExtensionFunctions.hide
 import com.anomalydev.trackyourdistance.util.ExtensionFunctions.show
-import com.anomalydev.trackyourdistance.util.Permissions
 import com.anomalydev.trackyourdistance.util.Permissions.hasBackgroundPermissionLocation
 import com.anomalydev.trackyourdistance.util.Permissions.requestBackgroundPermissionLocation
 
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
-@AndroidEntryPoint
 class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, EasyPermissions.PermissionCallbacks {
 
     private var _binding : FragmentMapsBinding? = null
@@ -104,10 +96,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
                 val currentSecond = millisUntilFinished / 1000
                 if (currentSecond.toString() == "0") {
                     binding.timerTextView.text = "GO"
-                    binding.timerTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    binding.timerTextView.setTextColor(ContextCompat.getColor(requireContext(),
+                        R.color.black
+                    ))
                 } else {
                     binding.timerTextView.text = currentSecond.toString()
-                    binding.timerTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                    binding.timerTextView.setTextColor(ContextCompat.getColor(requireContext(),
+                        R.color.red
+                    ))
                 }
             }
 

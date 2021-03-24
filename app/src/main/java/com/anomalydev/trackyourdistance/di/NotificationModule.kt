@@ -5,10 +5,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.anomalydev.trackyourdistance.MainActivity
-import com.anomalydev.trackyourdistance.MapsFragment
+import com.anomalydev.trackyourdistance.ui.MainActivity
 import com.anomalydev.trackyourdistance.R
-import com.anomalydev.trackyourdistance.util.Constants
 import com.anomalydev.trackyourdistance.util.Constants.ACTION_NAVIGATE_TO_MAPS_FRAGMENT
 import com.anomalydev.trackyourdistance.util.Constants.NOTIFICATION_CHANNEL_ID
 import com.anomalydev.trackyourdistance.util.Constants.PENDING_INTENT_REQUEST_CODE
@@ -30,10 +28,8 @@ object NotificationModule {
     ) : PendingIntent {
         return PendingIntent.getActivity(
             context,
-        PENDING_INTENT_REQUEST_CODE,
-        Intent(context, MainActivity::class.java).apply {
-            this.action = ACTION_NAVIGATE_TO_MAPS_FRAGMENT
-        },
+            PENDING_INTENT_REQUEST_CODE,
+            Intent(context, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
