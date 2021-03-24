@@ -1,4 +1,4 @@
-package com.anomalydev.trackyourdistance
+package com.anomalydev.trackyourdistance.ui.permission
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.anomalydev.trackyourdistance.R
 import com.anomalydev.trackyourdistance.util.Permissions.hasLocationPermission
 import com.anomalydev.trackyourdistance.util.Permissions.requestLocationPermission
 import com.anomalydev.trackyourdistance.databinding.FragmentPermissionBinding
