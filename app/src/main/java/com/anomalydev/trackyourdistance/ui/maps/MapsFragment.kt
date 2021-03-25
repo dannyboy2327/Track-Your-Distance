@@ -14,17 +14,22 @@ import androidx.lifecycle.lifecycleScope
 import com.anomalydev.trackyourdistance.R
 import com.anomalydev.trackyourdistance.databinding.FragmentMapsBinding
 import com.anomalydev.trackyourdistance.service.TrackerService
+import com.anomalydev.trackyourdistance.ui.maps.MapUtil.setCameraPosition
 import com.anomalydev.trackyourdistance.util.Constants.ACTION_SERVICE_START
 import com.anomalydev.trackyourdistance.util.ExtensionFunctions.disabled
 import com.anomalydev.trackyourdistance.util.ExtensionFunctions.hide
 import com.anomalydev.trackyourdistance.util.ExtensionFunctions.show
 import com.anomalydev.trackyourdistance.util.Permissions.hasBackgroundPermissionLocation
 import com.anomalydev.trackyourdistance.util.Permissions.requestBackgroundPermissionLocation
+import com.google.android.gms.maps.CameraUpdateFactory
 
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.ButtCap
+import com.google.android.gms.maps.model.JointType
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -85,8 +90,32 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
         TrackerService.locationList.observe(viewLifecycleOwner, {
             if (it != null) {
                 locationList = it
+                drawPolyline()
+                followPolyline()
             }
         })
+    }
+
+    private fun drawPolyline() {
+        val polyline = map.addPolyline(
+            PolylineOptions().apply {
+                width(10f)
+                jointType(JointType.ROUND)
+                startCap(ButtCap())
+                endCap(ButtCap())
+                addAll(locationList)
+            }
+        )
+    }
+
+    private fun followPolyline() {
+        if (locationList.isNotEmpty()) {
+            map.animateCamera((
+                CameraUpdateFactory.newCameraPosition(
+                    setCameraPosition(locationList.last())
+                )
+            ), 1000, null)
+        }
     }
 
     private fun onStartButtonClicked() {
