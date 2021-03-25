@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
+import com.anomalydev.trackyourdistance.ui.maps.MapUtil
 import com.anomalydev.trackyourdistance.util.Constants
 import com.anomalydev.trackyourdistance.util.Constants.ACTION_SERVICE_START
 import com.anomalydev.trackyourdistance.util.Constants.ACTION_SERVICE_STOP
@@ -46,12 +47,12 @@ class TrackerService : LifecycleService() {
     }
 
     private val locationCallback = object : LocationCallback() {
-
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
             result.locations.let { locations ->
                 for (location in locations) {
                     updateLocationList(location)
+                    updateNotificationPeriodically()
                 }
             }
         }
@@ -106,6 +107,16 @@ class TrackerService : LifecycleService() {
 
     private fun removeLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+
+    private fun updateNotificationPeriodically() {
+        notification.apply {
+            setContentTitle("Distance Travelled")
+            setContentText(locationList.value?.let {
+                MapUtil.calculateDistance(it)
+            } + "km")
+        }
+        notificationManager.notify(NOTIFICATION_ID, notification.build())
     }
 
     @SuppressLint("MissingPermission")
