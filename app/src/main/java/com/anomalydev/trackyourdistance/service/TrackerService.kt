@@ -39,6 +39,9 @@ class TrackerService : LifecycleService() {
 
     companion object {
         val started = MutableLiveData<Boolean>()
+        val startTime = MutableLiveData<Long>()
+        val stopTime = MutableLiveData<Long>()
+
         val locationList = MutableLiveData<MutableList<LatLng>>()
     }
 
@@ -56,6 +59,9 @@ class TrackerService : LifecycleService() {
 
     private fun setInitialValues() {
         started.postValue(false)
+        startTime.postValue(0)
+        stopTime.postValue(0)
+
         locationList.postValue(mutableListOf())
     }
 
@@ -98,22 +104,12 @@ class TrackerService : LifecycleService() {
             notification.build())
     }
 
-    private fun stopForegroundService() {
-        removeLocationUpdates()
-        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(
-            NOTIFICATION_ID
-        )
-        stopForeground(true)
-        stopSelf()
-    }
-
     private fun removeLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
     @SuppressLint("MissingPermission")
-    private fun startLocationUpdates()
-    {
+    private fun startLocationUpdates() {
         val locationRequest = LocationRequest().apply {
             interval = LOCATION_UPDATE_INTERVAL
             fastestInterval = LOCATION_FASTEST_UPDATE_INTERVAL
@@ -124,7 +120,19 @@ class TrackerService : LifecycleService() {
             locationCallback,
             Looper.getMainLooper()
         )
+        startTime.postValue(System.currentTimeMillis())
     }
+
+    private fun stopForegroundService() {
+        removeLocationUpdates()
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(
+            NOTIFICATION_ID
+        )
+        stopForeground(true)
+        stopSelf()
+        stopTime.postValue(System.currentTimeMillis())
+    }
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
