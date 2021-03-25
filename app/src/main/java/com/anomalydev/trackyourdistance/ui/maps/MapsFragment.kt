@@ -24,6 +24,7 @@ import com.anomalydev.trackyourdistance.util.Permissions.requestBackgroundPermis
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -35,6 +36,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
     private val binding get() = _binding!!
 
     private lateinit var map: GoogleMap
+
+    private var locationList = mutableListOf<LatLng>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,6 +78,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
             isCompassEnabled = false
             isScrollGesturesEnabled = false
         }
+        observeTrackerService()
+    }
+
+    private fun observeTrackerService() {
+        TrackerService.locationList.observe(viewLifecycleOwner, {
+            if (it != null) {
+                locationList = it
+            }
+        })
     }
 
     private fun onStartButtonClicked() {
